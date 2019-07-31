@@ -2,6 +2,8 @@ import React from 'react';
 import {Idea} from '../domain/Idea';
 import {IdeaComponent} from '../component/IdeaComponent';
 
+const url = process.env.REACT_APP_URL;
+
 type IdeaListViewState = {
     ideas: Idea[]
 }
@@ -21,10 +23,13 @@ export class IdeaListView extends React.Component<any, IdeaListViewState> {
     }
 
     loadIdeas(): void {
-        const url = 'http://localhost:8080/ideas';
-        console.debug('IdeaListView.loadIdeas via url:', url);
-        fetch(url)
-            .then(response => {console.debug(response); return response.json()})
+        const urlForIdeas = `${url}/ideas`;
+        console.debug('IdeaListView.loadIdeas via url:', urlForIdeas);
+        fetch(urlForIdeas)
+            .then(response => {
+                console.debug(response);
+                return response.json()
+            })
             .then(result => {
                 console.debug(result);
                 const ideas = result._embedded.ideas.map((i: any) => {
@@ -32,7 +37,11 @@ export class IdeaListView extends React.Component<any, IdeaListViewState> {
                     return new Idea(
                         links.self.href,
                         i.title,
-                        i.description);
+                        i.description,
+                        i.category,
+                        new Date(i.createdDate),
+                        new Date(i.lastModifiedDate)
+                    );
                 });
                 if (this._isMounted) {
                     this.setState({
@@ -57,13 +66,12 @@ export class IdeaListView extends React.Component<any, IdeaListViewState> {
 
     render() {
         const {ideas} = this.state;
-        const ideaComponents = ideas.map(i => {
-            return (<IdeaComponent title={i.title} description={i.description}/>)
+        const ideaComponents = ideas.map(idea => {
+            return (<IdeaComponent idea={idea}/>)
         });
 
         return (
             <div>
-                <p>List of all ideas: </p>
                 {ideaComponents}
             </div>
         );

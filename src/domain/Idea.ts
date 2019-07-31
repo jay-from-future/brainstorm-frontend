@@ -1,6 +1,15 @@
 export class Idea {
 
-    constructor(private _self: URL, private _title: string, private _description: string) {
+    constructor(private _self: URL,
+                private _title: string,
+                private _description: string,
+                private _category: string,
+                private _created: Date,
+                private _updated: Date) {
+    }
+
+    static getDefault() {
+        return new Idea(URL.prototype, '', '', '', Date.prototype, Date.prototype)
     }
 
     get self(): URL {
@@ -26,25 +35,29 @@ export class Idea {
     set description(value: string) {
         this._description = value;
     }
-}
 
-/*
-{
-  "title": "test title",
-  "description": "test description",
-  "_links": {
-    "self": {
-      "href": "http://localhost:8080/ideas/5d406c0f628dc54cf096d39e"
-    },
-    "idea": {
-      "href": "http://localhost:8080/ideas/5d406c0f628dc54cf096d39e"
-    },
-    "categories": {
-      "href": "http://localhost:8080/ideas/5d406c0f628dc54cf096d39e/categories"
-    },
-    "voters": {
-      "href": "http://localhost:8080/ideas/5d406c0f628dc54cf096d39e/voters"
+    get category(): string {
+        return this._category;
     }
-  }
+
+    set category(value: string) {
+        this._category = value;
+    }
+
+    get created(): Date {
+        return this._created;
+    }
+
+    set created(value: Date) {
+        this._created = value;
+    }
+
+    get updated(): Date {
+        return this._updated;
+    }
+
+    set updated(value: Date) {
+        this._updated = value;
+    }
+
 }
- */
