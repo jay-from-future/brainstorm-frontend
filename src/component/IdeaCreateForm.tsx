@@ -1,10 +1,8 @@
 import React from 'react';
 import {Idea} from '../domain/Idea';
 
-const url = process.env.REACT_APP_API_URL;
-
 type IdeaCreateFormProps = {
-    onCreate: { (): void };
+    onCreate: { (idea: Idea): void };
 }
 
 type IdeaCreateFormState = {
@@ -18,45 +16,12 @@ export class IdeaCreateForm extends React.Component<IdeaCreateFormProps, IdeaCre
 
         this.state = {idea: Idea.getDefault()};
 
-        this.onCreate = this.onCreate.bind(this);
         this.cleanUpForm = this.cleanUpForm.bind(this);
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleReset = this.handleReset.bind(this);
-    }
-
-    onCreate(): void {
-        const urlForIdeas = `${url}/ideas`;
-        console.debug('IdeaCreateForm.onCreate via url: ', urlForIdeas);
-        const {idea} = this.state;
-        const accessToken = localStorage.getItem('access_token');
-        fetch(urlForIdeas, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + accessToken
-            },
-            body: JSON.stringify({
-                title: idea.title,
-                description: idea.description,
-                category: idea.category,
-                voters: []
-            })
-        })
-            .then(
-                (result) => {
-                    console.log(result);
-                    this.cleanUpForm();
-                    this.props.onCreate();
-                },
-                (error) => {
-                    console.error(error);
-                }
-            );
-
     }
 
     cleanUpForm(): void {
@@ -86,7 +51,8 @@ export class IdeaCreateForm extends React.Component<IdeaCreateFormProps, IdeaCre
     handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         console.debug('IdeaCreateForm.handleSubmit');
-        this.onCreate();
+        this.props.onCreate(this.state.idea);
+        this.cleanUpForm();
     }
 
     handleReset() {

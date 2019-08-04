@@ -1,22 +1,24 @@
 export class Idea {
 
-    constructor(private _self: URL,
+    constructor(private _self: string,
                 private _title: string,
                 private _description: string,
                 private _category: string,
                 private _created: Date,
-                private _updated: Date) {
+                private _updated: Date,
+                private _thumbUp: number,
+                private _thumbDown: number) {
     }
 
     static getDefault() {
-        return new Idea(URL.prototype, '', '', '', Date.prototype, Date.prototype)
+        return new Idea('', '', '', '', new Date(), new Date(), 0, 0)
     }
 
-    get self(): URL {
+    get self(): string {
         return this._self;
     }
 
-    set self(value: URL) {
+    set self(value: string) {
         this._self = value;
     }
 
@@ -60,4 +62,19 @@ export class Idea {
         this._updated = value;
     }
 
+    get thumbUp(): number {
+        return this._thumbUp;
+    }
+
+    set thumbUp(value: number) {
+        this._thumbUp = value;
+    }
+
+    get thumbDown(): number {
+        return this._thumbDown;
+    }
+
+    set thumbDown(value: number) {
+        this._thumbDown = value;
+    }
 }

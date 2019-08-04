@@ -4,17 +4,18 @@ import {IdeaComponent} from './IdeaComponent';
 
 type IdeaListViewProps = {
     ideas: Idea[]
+    onUpdate: { (idea: Idea): void }
 }
 
 export class IdeaListView extends React.Component<IdeaListViewProps> {
 
     render() {
-        const {ideas} = this.props;
-        console.debug("ideas: ", ideas);
+        const {ideas, onUpdate} = this.props;
+        console.debug('ideas: ', ideas);
         let ideaComponents;
         if (ideas) {
             ideaComponents = ideas.map(idea => {
-                return (<IdeaComponent idea={idea}/>)
+                return (<IdeaComponent idea={idea} onUpdate={onUpdate}/>)
             });
         }
         return (

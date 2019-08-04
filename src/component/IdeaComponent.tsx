@@ -1,10 +1,10 @@
 import React from 'react';
 import {Idea} from '../domain/Idea';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faThumbsDown, faThumbsUp} from '@fortawesome/free-regular-svg-icons';
+import {VoteButtonsComponent} from './VoteButtonsComponent';
 
 type IdeaProps = {
-    idea: Idea
+    idea: Idea,
+    onUpdate: { (idea: Idea): void }
 }
 
 type IdeaState = {
@@ -19,6 +19,8 @@ export class IdeaComponent extends React.Component<IdeaProps, IdeaState> {
         this.state = {showFullDescription: false};
         this.showShortIdeaDescription = this.showShortIdeaDescription.bind(this);
         this.showFullIdeaDescription = this.showFullIdeaDescription.bind(this);
+        this.handleThumbUpClick = this.handleThumbUpClick.bind(this);
+        this.handleThumbDownClick = this.handleThumbDownClick.bind(this);
     }
 
     showShortIdeaDescription(): void {
@@ -31,6 +33,19 @@ export class IdeaComponent extends React.Component<IdeaProps, IdeaState> {
         this.setState({
             showFullDescription: true
         })
+    }
+
+
+    handleThumbUpClick(): void {
+        let idea = this.props.idea;
+        idea.thumbUp += 1;
+        this.props.onUpdate(idea);
+    }
+
+    handleThumbDownClick(): void {
+        let idea = this.props.idea;
+        idea.thumbDown += 1;
+        this.props.onUpdate(idea);
     }
 
     render() {
@@ -61,12 +76,8 @@ export class IdeaComponent extends React.Component<IdeaProps, IdeaState> {
                     <p className="card-text mb-auto" style={{'wordWrap': 'break-word'}}>{shortDescription}</p>
                     {showMoreOrLessLink}
                     <br/>
-                    <span>
-                            <button type="button" className="btn btn-light"><FontAwesomeIcon
-                                icon={faThumbsUp}/></button>
-                            <button type="button" className="btn btn-light"><FontAwesomeIcon
-                                icon={faThumbsDown}/></button>
-                        </span>
+                    <VoteButtonsComponent thumbUpCount={idea.thumbUp} handleThumbUpClick={this.handleThumbUpClick}
+                                          thumbDownCount={idea.thumbDown} handleThumbDownClick={this.handleThumbDownClick}/>
                 </div>
                 <div className="col-auto d-none d-lg-block">
                     <svg className="bd-placeholder-img" width="200" height="250"
