@@ -3,13 +3,17 @@ import {Idea} from '../domain/Idea';
 
 const url = process.env.REACT_APP_API_URL;
 
+type IdeaCreateFormProps = {
+    onCreate: { (): void };
+}
+
 type IdeaCreateFormState = {
     idea: Idea
 }
 
-export class IdeaCreateForm extends React.Component<any, IdeaCreateFormState> {
+export class IdeaCreateForm extends React.Component<IdeaCreateFormProps, IdeaCreateFormState> {
 
-    constructor(props: any) {
+    constructor(props: IdeaCreateFormProps) {
         super(props);
 
         this.state = {idea: Idea.getDefault()};
@@ -46,6 +50,7 @@ export class IdeaCreateForm extends React.Component<any, IdeaCreateFormState> {
                 (result) => {
                     console.log(result);
                     this.cleanUpForm();
+                    this.props.onCreate();
                 },
                 (error) => {
                     console.error(error);
