@@ -1,7 +1,7 @@
 import React from 'react';
 import {Idea} from '../domain/Idea';
 
-const url = process.env.REACT_APP_URL;
+const url = process.env.REACT_APP_API_URL;
 
 type IdeaCreateFormState = {
     idea: Idea
@@ -27,11 +27,13 @@ export class IdeaCreateForm extends React.Component<any, IdeaCreateFormState> {
         const urlForIdeas = `${url}/ideas`;
         console.debug('IdeaCreateForm.onCreate via url: ', urlForIdeas);
         const {idea} = this.state;
+        const accessToken = localStorage.getItem('access_token');
         fetch(urlForIdeas, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + accessToken
             },
             body: JSON.stringify({
                 title: idea.title,
