@@ -7,11 +7,12 @@ export class Idea {
                 private _created: Date,
                 private _updated: Date,
                 private _thumbUp: number,
-                private _thumbDown: number) {
+                private _thumbDown: number,
+                private _picture: string) {
     }
 
     static getDefault() {
-        return new Idea('', '', '', '', new Date(), new Date(), 0, 0)
+        return new Idea('', '', '', '', new Date(), new Date(), 0, 0, '')
     }
 
     get self(): string {
@@ -76,5 +77,13 @@ export class Idea {
 
     set thumbDown(value: number) {
         this._thumbDown = value;
+    }
+
+    get picture(): string {
+        return this._picture;
+    }
+
+    set picture(value: string) {
+        this._picture = value;
     }
 }

@@ -20,6 +20,7 @@ export class IdeaCreateForm extends React.Component<IdeaCreateFormProps, IdeaCre
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+        this.handleImageUpload = this.handleImageUpload.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleReset = this.handleReset.bind(this);
     }
@@ -45,6 +46,36 @@ export class IdeaCreateForm extends React.Component<IdeaCreateFormProps, IdeaCre
         const idea = this.state.idea;
         let textContent = e.currentTarget.value;
         idea.description = textContent ? textContent : '';
+        this.setState({idea: idea});
+    }
+
+    convertPictureToBase64(file: any): any {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            if (reader.result) {
+                const idea = this.state.idea;
+                idea.picture = reader.result.toString();
+                this.setState({idea: idea});
+            }
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
+
+    handleImageUpload(e: React.ChangeEvent<HTMLInputElement>): void {
+        const idea = this.state.idea;
+        const files = e.currentTarget.files;
+        if (files) {
+            const file = files[0];
+            // file should be no more than 1 megabyte
+            if (file.size <= 1048576) {
+                idea.picture = this.convertPictureToBase64(file);
+            } else {
+                console.error('File is too big for upload');
+            }
+        }
         this.setState({idea: idea});
     }
 
@@ -98,8 +129,9 @@ export class IdeaCreateForm extends React.Component<IdeaCreateFormProps, IdeaCre
                         </small>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="exampleFormControlFile1">Load a picture to illustrate your idea:</label>
-                        <input type="file" className="form-control-file" id="exampleFormControlFile1"/>
+                        <label htmlFor="inputPictureOfIdea">Load a picture to illustrate your idea:</label>
+                        <input type="file" className="form-control-file" id="inputPictureOfIdea"
+                               onChange={this.handleImageUpload}/>
                     </div>
                     <div className="form-row">
                         <button type="submit" className="btn btn-primary">Share</button>

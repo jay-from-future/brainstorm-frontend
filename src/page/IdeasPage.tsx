@@ -57,7 +57,8 @@ export class IdeasPage extends React.Component<any, IdeasPageState> {
                     new Date(i.createdDate),
                     new Date(i.lastModifiedDate),
                     i.thumbUp,
-                    i.thumbDown
+                    i.thumbDown,
+                    i.picture
                 );
             });
             if (this._isMounted) {
@@ -86,7 +87,8 @@ export class IdeasPage extends React.Component<any, IdeasPageState> {
                 description: idea.description,
                 category: idea.category,
                 thumbUp: idea.thumbUp,
-                thumbDown: idea.thumbUp
+                thumbDown: idea.thumbUp,
+                picture: idea.picture
             })
         })
             .then(
@@ -102,7 +104,7 @@ export class IdeasPage extends React.Component<any, IdeasPageState> {
     }
 
     onUpdate(idea: Idea): void {
-        console.debug("updating ides: ", idea);
+        console.debug('updating ides: ', idea);
         const accessToken = localStorage.getItem('access_token');
         fetch(idea.self, {
             method: 'PUT',
@@ -116,7 +118,8 @@ export class IdeasPage extends React.Component<any, IdeasPageState> {
                 description: idea.description,
                 category: idea.category,
                 thumbUp: idea.thumbUp,
-                thumbDown: idea.thumbDown
+                thumbDown: idea.thumbDown,
+                picture: idea.picture
             })
         })
             .then(
