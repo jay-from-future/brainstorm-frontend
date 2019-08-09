@@ -9,12 +9,16 @@ const auth = process.env.REACT_APP_AUTH_URL;
 const clientId = 'brainstorm-jwt-client';
 const clientSecret = 'admin';
 
+type LoginPageProps = {
+    setLoggedInState: { (state: boolean): void }
+}
+
 type LoginPageState = {
     isInvalidCredentials: boolean,
     isLoading: boolean
 }
 
-export class LoginPage extends React.Component<any, LoginPageState> {
+export class LoginPage extends React.Component<LoginPageProps, LoginPageState> {
 
     constructor(props: any) {
         super(props);
@@ -74,9 +78,9 @@ export class LoginPage extends React.Component<any, LoginPageState> {
                 });
 
                 localStorage.setItem('access_token', result.access_token);
+                this.props.setLoggedInState(true);
                 const history = getHistory();
                 history.push('/');
-
             } else {
                 // todo handle error
                 console.error('todo handle error', result);
